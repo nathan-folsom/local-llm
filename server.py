@@ -4,7 +4,7 @@ from mlx_lm.models.cache import make_prompt_cache
 
 import json
 
-model_path = "/Users/nate/ai/CodeLlama-7b-Instruct-hf-4bit-MLX/"
+model_path = "/Users/nate/ai/CodeLlama-34b-Instruct-hf-4bit/"
 print(f"Starting up model {model_path}")
 model, tokenizer = load(model_path)
 prompt_cache = make_prompt_cache(model)
@@ -42,11 +42,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             model,
             tokenizer,
             prompt=prompt,
-            prompt_cache=prompt_cache
+            prompt_cache=prompt_cache,
+            max_tokens=-1,
         ):
-            print(f"LLM Response: {data.text}")
-            response = {'message': {'content': data.text}}
-            print(f"Serialized: {response}")
+            response = {'message': {'content': data.text, 'role': "assistant"}}
             self.wfile.write(json.dumps(response).encode('utf-8') + b'\n')
 
 
